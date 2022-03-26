@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 import json
 import pymongo
 from pymongo import MongoClient
+import math
 
 cluster = MongoClient("mongodb+srv://isaiah:nadder3415@recipe-app.daa69.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 db = cluster["Recipes"]
@@ -44,18 +45,29 @@ def createRecipe():
         "Servings": NULL,
         "Yield": NULL,
     },
-    "link": ""
+    "link": "",
+    "imgLink": "",
+    "avgRating":0,
 }
 
 #Turns array of strings into dictionary given a seperator for key and values
-def listSplitter(unsplitList, seperator):
+def listSplitter(unsplitList, seperator):       
     listKeys, listVals = map(list, zip(*(x.split(seperator) for x in unsplitList)))
     listKeys, listVals = [" ".join(val.split()) for val in listKeys], [" ".join(val.split()) for val in listVals]
     return dict(zip(listKeys, listVals))
 
+def averageRatings(ratings):
+    avgRating = 0
+    currStar = 5
+    for rating in ratings:
+        avgRating += currStar*rating
+        currStar -= 1
+    return  (round(avgRating/(sum(ratings) or math.inf), 1) - 3.75)*math.log(sum(ratings)) + 1
+
 #Scraping for each section
 for url in URLS:
     currSection = url.split('/')[5]
+    print(currSection)
     currCollection = db[currSection]
     nextURL = url
     while nextURL:
@@ -82,12 +94,17 @@ for url in URLS:
             title = recipeSoup.select_one('div.intro.article-info div.headline-wrapper h1.headline.heading-content.elementFont__display').get_text()
             nutrition = [nutrition.get_text() for nutrition in recipeSoup.select('div.recipeNutritionSectionBlock div.section-body')]
             timeTitles = [times.get_text() for times in recipeSoup.select('div.two-subcol-content-wrapper div.recipe-meta-item')]
+            imgLink = recipeSoup.select_one('aside.recipe-tout-image div.component.lazy-image') or recipeSoup.select_one('div.image-container div.component.lazy-image')
+            ratings = averageRatings([int(rating.get_text()) for rating in recipeSoup.select('div.recipeRatingsList li.rating span.rating-count')])
 
             #Adding values to currentRecipe dictionary
             currRecipe['ingredients'] = ingredients
             currRecipe['directions'] = directions
             currRecipe['title'] = title
             currRecipe['link'] = recipe['href']
+            currRecipe['avgRating'] = ratings
+            if imgLink:
+                currRecipe['imgLink'] = imgLink['data-src']
 
             #Checks if nutrition facts were pulled
             if nutrition:
@@ -106,7 +123,8 @@ for url in URLS:
             currCollection.insert_one(currRecipe)
 
         #Updates nextURL with url to next page with recipes
-        nextURL = soup.find('a', href=True, class_='category-page-list-related-load-more-button') or soup.find('a', href=True, class_='category-page-list-related-nav-next-button')
+        nextURL = soup.find('a', href=True, class_='category-page-list-related-load-more-button') or soup.find('a', href=True, class_='categoryPage__relatedButton categoryPage__relatedButton--next')
+
         if nextURL:
             #Sets NEXTURL to an href
             nextURL = nextURL['href']
