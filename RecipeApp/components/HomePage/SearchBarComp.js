@@ -9,7 +9,7 @@ const SearchComp = () => {
   return (
     <View style={styles.SectionStyle}>
         <Image
-            source={require('../Images/SearchIcon.png')} 
+            source={require('../../Images/SearchIcon.png')} 
             style={styles.ImageStyle}
         />
         <TextInput
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   textStyle: {
     color: 'black',
     flex: 1,
-    fontFamily: 'Poppins-Black'
+    fontFamily: 'Poppins-Regular'
   }
 });
 
