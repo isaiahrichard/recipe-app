@@ -11,6 +11,7 @@ const Header = () => {
 
 const styles = StyleSheet.create({
    header: {
+    width: '100%',
     flexDirection: "row",
     height: 71,
     padding: 12,

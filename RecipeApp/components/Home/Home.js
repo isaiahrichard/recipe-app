@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, ScrollView} from 'react-native';
 import Header from '../Header'
-import SearchBarComp from './SearchBarComp';
+import SearchBarComp from '../SearchBarComp';
 import CardComp from './CardComp'
 import Footer from '../Footer';
 

@@ -51,8 +51,9 @@ const Footer = ( {navigation} ) => {
                     onPress={() => navigation.navigate(Page.pageName)} 
                     underlayColor={'transparent'} 
                     style={Page.styles}
+                    key={index}
                   >
-                      <View style={styles.IconContainer} key={index}> 
+                      <View style={styles.IconContainer}> 
                         <Image source={Page.imgSrc} style={styles.FooterIcons} />
                       </View>
                   </TouchableHighlight>

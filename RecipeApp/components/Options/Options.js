@@ -1,41 +1,28 @@
 import React, {useState} from 'react';
-import {View, ScrollView, StyleSheet, Text} from 'react-native';
-import CheckBox from '@react-native-community/checkbox';
+import {View, ScrollView} from 'react-native';
 
 import Header from '../Header'
-import SearchBarComp from '../Home/SearchBarComp';
+import SearchBarComp from '../SearchBarComp';
 import Footer from '../Footer';
-import TabBar from './TabBar';
+import TabBar from '../TabBar';
 import OptionCard from './OptionCard';
 
-import {applianceInfo, myApplianceInfo} from './AppliancesData'
-import {commonIngredientsInfo, myIngredientsInfo} from './IngredientData'
+import {applianceInfo, myApplianceInfo} from '../../data/AppliancesData'
+import {commonIngredientsInfo, myIngredientsInfo} from '../../data/IngredientData'
 
 
 
 const Options = ( {navigation} ) => {
 
   const [ingredientTab, setIngredientTab] = useState(false);
-  const [toggleCheckbox, setToggleCheckbox] = useState(false);
+  const titles= ["Appliances", "Ingredients"]
 
   return (
     <View style={{flex: 1}}>
     <ScrollView>
       <Header/>
-      <TabBar ingredientTab={ingredientTab} setIngredientTab={setIngredientTab}/>
+      <TabBar ingredientTab={ingredientTab} setIngredientTab={setIngredientTab} titles={titles}/>
       <SearchBarComp />
-      {
-        ingredientTab ? 
-        <View style={styles.CheckboxWrapper}>
-          <CheckBox
-          value={toggleCheckbox}
-          onValueChange={(newValue) => setToggleCheckbox(newValue)}
-          tintColors={{ true: '#FF6C6C'}}
-          />
-          <Text style={styles.CheckboxMsg}>Only show me recipes I can make</Text>
-        </View> 
-        : <View></View>
-      }
       <OptionCard 
       buttonInfoArray={ingredientTab ? commonIngredientsInfo : applianceInfo} 
       title={ingredientTab ? "Common Ingredients" : "Common Appliances"}/>
@@ -47,22 +34,5 @@ const Options = ( {navigation} ) => {
   </View>
   )
 }
-
-const styles = StyleSheet.create({
-  CheckboxWrapper: {  
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 5
-  },
-
-  CheckboxMsg: {
-    fontSize: 13,
-    fontFamily: 'Poppins-Regular',
-    color: '#000',
-    paddingLeft: 10,
-    paddingTop: 2
-  }
-})
 
 export default Options
