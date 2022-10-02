@@ -29,7 +29,6 @@ const styles = StyleSheet.create({
 
   SectionStyle: {
     flexDirection: 'row',
-    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#D9D9D9',
     borderWidth: 0,
@@ -44,16 +43,24 @@ const styles = StyleSheet.create({
   ImageStyle: {
       padding: 10,
       margin: 10,
-      marginRight: 15,
-      height: 21,
-      width: 21,
+      height: 15,
+      width: 15,
       resizeMode: 'stretch',
       alignItems: 'center',
+      position: 'absolute',
+      zIndex: 1
   },
   textStyle: {
     color: 'black',
-    flex: 1,
-    fontFamily: 'Poppins-Regular'
+    fontFamily: 'Poppins-Regular',
+    width: '100%',
+    fontSize: 16,
+    paddingTop: 3,
+    paddingBottom: 0,
+    paddingLeft: 50,
+    borderRadius: 10,
+    height: '100%',
+    zIndex: 2
   }
 });
 
