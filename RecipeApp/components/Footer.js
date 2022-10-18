@@ -14,11 +14,14 @@ const Footer = ( {navigation} ) => {
     RecipesLight = require('../Images/Footer/RecipesLight.png')
     ProfileDark = require('../Images/Footer/ProfileDark.png')
     ProfileLight = require('../Images/Footer/ProfileLight.png')
+    LoginLight = require('../Images/Settings.png')
+    LoginDark = require('../Images/Footer/LoginDark.png')
 
     onHomePage = route.name == 'home'
     onOptionsPage = route.name == 'options'
     onRecipesPage = route.name == 'recipes'
     onProfilePage = route.name == 'profile'
+    onLoginPage = route.name == 'login'
 
   const PageInfo = [
     {
@@ -40,6 +43,11 @@ const Footer = ( {navigation} ) => {
       imgSrc: onProfilePage ? ProfileLight : ProfileDark,
       pageName: 'profile',
       styles: onProfilePage ? {flex: 1, backgroundColor: '#FF3F3F'} : {flex: 1}
+    },
+    {
+      imgSrc: onLoginPage ? LoginLight : LoginDark,
+      pageName: 'login',
+      styles: onLoginPage ? {flex: 1, backgroundColor: '#FF3F3F'} : {flex: 1}
     }
   ]
 

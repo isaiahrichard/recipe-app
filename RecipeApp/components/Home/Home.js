@@ -14,7 +14,7 @@ const HomePage = ( {navigation} ) => {
       <CardComp title='Less Thinking, More Eating' imgSrc={require(`../../Images/Ingredients.png`)}
       cardText='ENTER YOUR INGREDIENTS AND APPLIANCES'
       />
-      <CardComp title='Need Ideas? Try A Featured Recipe' imgSrc={require(`../../Images/Recipe1.png`)}
+      <CardComp title='Need Ideas? Try A Featured Recipe' imgSrc={require(`../../Images/DummyRecipe.png`)}
       cardText='Blueberry Breakfast Granola' extraStyles={{backgroundColor: '#F1EFF9', maxWidth: 300, padding: 2, color: '#000'}}
       />
     </ScrollView>

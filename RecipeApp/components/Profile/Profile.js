@@ -1,22 +1,22 @@
 import React from 'react';
 import {View, ScrollView} from 'react-native';
 import Header from '../Header'
-import SearchBarComp from '../SearchBarComp';
-import CardComp from '../Home/CardComp'
 import Footer from '../Footer';
+import ProfileInfo from './ProfileInfo';
+import ChangeSettings from './ChangeSettings';
+import StatsHeader from './StatsHeader';
+import Stats from './Stats';
 
 const Profile = ( {navigation} ) => {
   return (
     <View style={{flex: 1}}>
     <ScrollView>
       <Header/>
-      <SearchBarComp />
-      <CardComp title='Profile' imgSrc={require(`../../Images/Ingredients.png`)}
-      cardText='ENTER YOUR INGREDIENTS AND APPLIANCES'
-      />
-      <CardComp title='Profile' imgSrc={require(`../../Images/Recipe1.png`)}
-      cardText='Blueberry Breakfast Granola' extraStyles={{backgroundColor: '#F1EFF9', maxWidth: 300, padding: 2, color: '#000'}}
-      />
+      <ProfileInfo />
+      <ChangeSettings />
+      <StatsHeader />
+      <Stats color='#FFD772' icon={require('../../Images/RecipeStat.png')} text='Recipes Cooked: 13'/>
+      <Stats color='#B8FF81' icon={require('../../Images/IngredTab.png')} text='Unique Ingredients Used: 56'/>
     </ScrollView>
     <Footer navigation = {navigation}/>
   </View>
