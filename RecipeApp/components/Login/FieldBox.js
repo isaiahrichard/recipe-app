@@ -1,8 +1,12 @@
-import React from 'react'
+import React, { useContext }from 'react'
 import {View, StyleSheet, Image, TextInput} from 'react-native';
 
+import { StateContext } from '../Context/StateContext';
 
-const FieldBox = ({icon, inputObj}) => {
+
+const FieldBox = ({icon, isPassword=false}) => {
+
+    const [stateVar, setStateVar] = useContext(StateContext)[isPassword ? 'usernameObj' : 'passwordObj']
 
 
   return (
@@ -12,13 +16,13 @@ const FieldBox = ({icon, inputObj}) => {
         </View>
         <View style={styles.InputBox}>
             <TextInput
-                placeholder={inputObj.placeholder}
+                placeholder={isPassword ? 'Password' : 'Username or email'}
                 placeholderTextColor="#515151"
                 underlineColorAndroid="transparent"
                 spellCheck={false}
-                value={inputObj.value}
-                onChange={(inputText) => inputObj.setValue(inputText)}
-                secureTextEntry={inputObj.isPassword}
+                value={stateVar}
+                onChange={(inputText) => setStateVar(inputText)}
+                secureTextEntry={isPassword}
             />
         </View>
     </View>

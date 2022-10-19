@@ -1,29 +1,18 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import {View} from 'react-native';
-
 import FieldBox from './FieldBox';
+import { StateContext } from '../Context/StateContext';
 
 
 const FieldBoxWrapper = ({setValidLogin}) => {
     usernameIcon = require('../../Images/Footer/LoginLight.png')
     passwordIcon = require('../../Images/Footer/LoginDark.png')
+
+    const {usernameObj, passwordObj} = useContext(StateContext)
   
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+    const username = usernameObj[0]
+    const password = passwordObj[0]
   
-    const usernameObj = {
-      value: username, 
-      setValue: setUsername, 
-      placeholder: "Username or email", 
-      isPassword: false
-    }
-  
-    const passwordObj = {
-      value: password, 
-      setValue: setPassword, 
-      placeholder: "Password", 
-      isPassword: true
-    }
 
     useEffect(() => {
       if(username && password){
@@ -37,8 +26,8 @@ const FieldBoxWrapper = ({setValidLogin}) => {
 
   return (
     <View style={{flex: 1}}>
-        <FieldBox icon={usernameIcon} inputObj={usernameObj}/>
-        <FieldBox icon={passwordIcon} inputObj={passwordObj}/>
+        <FieldBox icon={usernameIcon} />
+        <FieldBox icon={passwordIcon} isPassword={true}/>
     </View>
   )
 }

@@ -8,12 +8,14 @@ import Login from './components/Login/Login';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { StateProvider } from './components/Context/StateContext';
 
 const Stack = createNativeStackNavigator();
 
 const App = () => {
 
   return (
+    <StateProvider>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{headerShown: false}}>
           <Stack.Screen name='login' component={Login} />
@@ -23,6 +25,7 @@ const App = () => {
           <Stack.Screen name='profile' component={Profile}/>
         </Stack.Navigator>
       </NavigationContainer>
+    </StateProvider>
   );
 };
 
