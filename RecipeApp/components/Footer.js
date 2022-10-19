@@ -1,7 +1,6 @@
 import React, { useContext } from 'react'
 import { View, Image, StyleSheet, TouchableHighlight} from 'react-native'
 import { useRoute } from '@react-navigation/native';
-import {PageInfo} from '../assets/footerInfo'
 import { StateContext } from './Context/StateContext';
 
 const Footer = ( {navigation} ) => {
@@ -25,6 +24,34 @@ const Footer = ( {navigation} ) => {
     onProfilePage = route.name == 'profile'
     onLoginPage = route.name == 'login'
 
+    const PageInfo = [
+      {
+        imgSrc: onHomePage ? homeLight : homeDark,
+        pageName: 'home',
+        styles: onHomePage ? {flex: 1, backgroundColor: '#FF3F3F'} : {flex: 1}
+      },
+      {
+        imgSrc: onOptionsPage ? OptionsLight : OptionsDark,
+        pageName: 'options',
+        styles: onOptionsPage ? {flex: 1, backgroundColor: '#FF3F3F'} : {flex: 1}
+      },
+      {
+        imgSrc: onRecipesPage ? RecipesLight : RecipesDark,
+        pageName: 'recipes',
+        styles: onRecipesPage ? {flex: 1, backgroundColor: '#FF3F3F'} : {flex: 1}
+      },
+      {
+        imgSrc: onProfilePage ? ProfileLight : ProfileDark,
+        pageName: 'profile',
+        styles: onProfilePage ? {flex: 1, backgroundColor: '#FF3F3F'} : {flex: 1}
+      },
+      {
+        imgSrc: onLoginPage ? LoginLight : LoginDark,
+        pageName: 'login',
+        styles: onLoginPage ? {flex: 1, backgroundColor: '#FF3F3F'} : {flex: 1}
+      }
+    ]
+
     const {usernameObj, passwordObj} = useContext(StateContext)
     const setUsername = usernameObj[1]
     const setPassword = passwordObj[1]
@@ -36,7 +63,6 @@ const Footer = ( {navigation} ) => {
       }
       navigation.navigate(Page.pageName)
     }
-
 
   return (
     <View style={styles.FooterWrapper}> 
