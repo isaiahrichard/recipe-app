@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import {View, StyleSheet, Text, TouchableHighlight, Alert} from 'react-native';
 
 
-const Button = ({text, navigation, validLogin}) => {
+const Button = ({text, navigation, validLogin, onButton}) => {
 
   const handleLogin = () => {
     if(validLogin){
@@ -16,7 +16,7 @@ const Button = ({text, navigation, validLogin}) => {
   }
 
   return (
-    <TouchableHighlight onPress={handleLogin} underlayColor={'transparent'}>
+    <TouchableHighlight onPress={onButton} underlayColor={'transparent'}>
       <View style={styles.ButtonWrapper}>
           <Text style={styles.InnerText}>{text}</Text>
       </View>

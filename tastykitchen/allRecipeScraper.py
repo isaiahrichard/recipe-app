@@ -1,13 +1,12 @@
 from asyncio.windows_events import NULL
 import requests
 from bs4 import BeautifulSoup
-import json
-# import pymongo
-# from pymongo import MongoClient
+from pymongo import MongoClient
 import math
 
-# cluster = MongoClient("mongodb+srv://isaiah:nadder3415@recipe-app.daa69.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
-# db = cluster["Recipes"]
+cluster = MongoClient(
+    "mongodb+srv://isaiah:nadder3415@recipe-app.daa69.mongodb.net/?retryWrites=true&w=majority")
+db = cluster.test
 
 # Access Header
 hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
@@ -109,18 +108,20 @@ def averageRatings(ratings):
 for url in URLS:
     currSection = url.split('/')[5]
     print(currSection)
-    # currCollection = db[currSection]
+    currCollection = db[currSection]
     nextURL = url
     while nextURL:
+        print(nextURL)
         # Get url for next page with recipes within a section
         page = requests.get(nextURL, headers=hdr)
         soup = BeautifulSoup(page.content, features="html.parser")
         # Gets list of recipe urls
         recipeList = soup.select('div.card__detailsContainer-left a.manual-link-behavior.card__titleLink',
                                  href=True) or soup.select('div.tout__contentHeadline a.tout__titleLink.elementFont__toutLink', href=True)
+        print(f"Recipe List :{recipeList}")
         for recipe in recipeList:
             # creates of a copy of the recipe template
-            currRecipe = createRecipe()
+            currRecipe = {}
 
             # adds 'https://www.allrecipes.com' to the front of links
             recipe['href'] = recipe['href'].replace(
@@ -135,8 +136,6 @@ for url in URLS:
             # Scraping values from website
             ingredients = [ingredient.get_text() for ingredient in recipeSoup.select(
                 'ul.ingredients-section span.ingredients-item-name.elementFont__body')]
-            if not ingredients:
-                continue
             directions = [direction.get_text().lower() for direction in recipeSoup.select(
                 'ul.instructions-section li.instructions-section-item p')]
             title = recipeSoup.select_one(
@@ -150,7 +149,8 @@ for url in URLS:
             ratings = averageRatings([int(rating.get_text()) for rating in recipeSoup.select(
                 'div.recipeRatingsList li.rating span.rating-count')])
 
-            print(directions)
+            if not all(info for info in [ingredients, directions, title, nutrition, timeTitles, imgLink, ratings]):
+                continue
 
             # Adding values to currentRecipe dictionary
             currRecipe['ingredients'] = ingredients
@@ -158,29 +158,26 @@ for url in URLS:
             currRecipe['title'] = title
             currRecipe['link'] = recipe['href']
             currRecipe['avgRating'] = ratings
-            if imgLink:
-                currRecipe['imgLink'] = imgLink['data-src']
+            currRecipe['imgLink'] = imgLink['data-src']
 
-            # Checks if nutrition facts were pulled
-            if nutrition:
-                # Removes full nutrition from end of string
-                nutritionList = (nutrition[0].split(
-                    '. Full Nutrition')[0]).split(';')
-                # Removes unnecessary spaces
-                nutritionList = [" ".join(val.split())
-                                 for val in nutritionList]
-                # Sets calories to key instead of value
-                nutritionList[0] = ''.join(
-                    nutritionList[0].partition(' ')[::-1])
-                # Updates the currentRecipe template with nutrition values
-                currRecipe["nutrition"] = {key: listSplitter(nutritionList, ' ').get(
-                    key, currRecipe["nutrition"][key]) for key in currRecipe["nutrition"]}
+            # Removes full nutrition from end of string
+            nutritionList = (nutrition[0].split(
+                '. Full Nutrition')[0]).split(';')
+            # Removes unnecessary spaces
+            nutritionList = [" ".join(val.split())
+                             for val in nutritionList]
+            # Sets calories to key instead of value
+            nutritionList[0] = ''.join(
+                nutritionList[0].partition(' ')[::-1])
+            # Updates the currentRecipe template with nutrition values
+            currRecipe["nutrition"] = {key: listSplitter(nutritionList, ' ').get(
+                key, currRecipe["nutrition"][key]) for key in currRecipe["nutrition"]}
 
             # Updates the currentRecipe template with time values
             currRecipe['timeTitles'] = {key: listSplitter(timeTitles, ':').get(
                 key, currRecipe["timeTitles"][key]) for key in currRecipe["timeTitles"]}
             # Adds currentRecipe dictionary to currentRecipe arrays
-            # currCollection.insert_one(currRecipe)
+            currCollection.insert_one(currRecipe)
 
         # Updates nextURL with url to next page with recipes
         nextURL = soup.find('a', href=True, class_='category-page-list-related-load-more-button') or soup.find(
